@@ -3,7 +3,7 @@
 import SwiftUI
 
 @main
-struct ___PACKAGENAME:identifier___App: App {
+struct Taptical___Sarah: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

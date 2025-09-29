@@ -8,11 +8,18 @@
 import SwiftUI
 
 struct AnimatedTaptii: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    @State private var pulse = false
 
-#Preview {
-    AnimatedTaptii()
+    var body: some View {
+        Image("Taptii")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 400, height: 400)
+                    .scaleEffect(pulse ? 1.1 : 0.9)
+                    .animation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true), value: pulse)
+                    .onAppear {
+                        pulse = true
+            }
+       
+    }
 }
