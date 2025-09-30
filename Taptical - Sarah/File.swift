@@ -1,0 +1,1 @@
+     //   Image(isTapped ?"شعاع":"taptii")
