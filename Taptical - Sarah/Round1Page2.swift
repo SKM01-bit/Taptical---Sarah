@@ -1,18 +1,18 @@
 //
-//  thirdPage.swift
+//  FourthPage.swift
 //  Taptical - Sarah
 //
-//  Created by Sarah Khalid Almalki on 06/04/1447 AH.
+//  Created by Sarah Khalid Almalki on 08/04/1447 AH.
 //
 
 import SwiftUI
 
-struct ThirdPage: View {
+struct R1P1: View {
     @State private var isTapped = false
     @State private var tapCount = 0
     @State private var navigate = false
 
-    let maxTaps = 2
+    let maxTaps = 3
     
     var body: some View {
         NavigationView {
@@ -22,13 +22,13 @@ struct ThirdPage: View {
                     .scaledToFill()
                     .ignoresSafeArea()
                 
-                Image(isTapped ? "Yellow2" : "White2")
-                    .position(x: 350, y: 400)
+                Image(isTapped ? "Yellow3" : "White3")
+                    .position(x: 100, y: 200)
                     .onTapGesture {
                         isTapped.toggle()
                         tapCount += 1
                         
-                        if tapCount >= maxTaps {
+                        if tapCount == maxTaps {
                             navigate = true
                         }
                     }
@@ -43,5 +43,5 @@ struct ThirdPage: View {
 }
 
 #Preview {
-    ThirdPage()
+    R1P1()
 }
