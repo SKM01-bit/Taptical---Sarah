@@ -11,7 +11,7 @@ struct goldenPulse: View {
     @State private var pulse = false
     
     var body: some View {
-        Image("شعاع")
+        Image("Glow")
             .resizable()
             .frame(width: 200, height: 200)
             .scaledToFit()

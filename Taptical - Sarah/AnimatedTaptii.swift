@@ -9,8 +9,10 @@ import SwiftUI
 
 struct AnimatedTaptii: View {
     @State private var pulse = false
+  //  @State private var isTapped = false
 
     var body: some View {
+     //   Image(isTapped ?"شعاع":"taptii")
         Image("Taptii")
                     .resizable()
                     .scaledToFit()
@@ -20,6 +22,8 @@ struct AnimatedTaptii: View {
                     .onAppear {
                         pulse = true
             }
-       
+                /*    .onTapGesture {
+                        isTapped.toggle()
+                    }*/
     }
 }

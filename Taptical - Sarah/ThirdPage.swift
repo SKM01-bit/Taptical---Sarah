@@ -8,19 +8,36 @@
 import SwiftUI
 
 struct ThirdPage: View {
-    var body: some View {
-        ZStack {
-            // Full-screen pink background
-            Color(red: 0.2, green: 0.50, blue: 0.6) // light pink
-                .ignoresSafeArea()
+    @State private var isTapped = false
+    @State private var tapCount = 0
+    @State private var navigate = false
 
-            // Centered bold green text
-            Text("^^\n Hello, This is the third page\n\n🌸🩰✨")
-                .foregroundColor(.white)
-                .bold()
-                .font(.system(size: 23))
-                .multilineTextAlignment(.center)
-                .padding()
+    let maxTaps = 2
+    
+    var body: some View {
+        NavigationView {
+            ZStack {
+                Image("FirstRound")
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
+                
+                Image(isTapped ? "Yellow2" : "White2")
+                    .position(x: 350, y: 400)
+                    .onTapGesture {
+                        isTapped.toggle()
+                        tapCount += 1
+                        
+                        if tapCount >= maxTaps {
+                            navigate = true
+                        }
+                    }
+
+                // Hidden NavigationLink that activates when navigate == true
+                NavigationLink(destination: FourthPage(), isActive: $navigate) {
+                    EmptyView()
+                }
+            }
         }
     }
 }

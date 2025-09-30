@@ -11,13 +11,15 @@ struct ContentView: View {
         @State private var shake: Bool = false
     @State private var pulse = false
     @State private var navigate = false
+    @State private var isTapped = false
+
 
 
 
     let image = Image("Taptii")
     var body: some View {
         
-        NavigationStack {
+      NavigationStack {
                     ZStack {
                         Image("Background")
                                         .resizable()
@@ -38,7 +40,11 @@ struct ContentView: View {
                                     }.allowsHitTesting(false)
 
                         // ✅ Navigation Button
-                        VStack {
+                     VStack {
+                         Image(isTapped ?"شعاع":"taptii")
+                             .onTapGesture {
+                                 isTapped.toggle()
+                             }
                             Spacer()
                             NavigationLink(destination: SecondPage()) {
                                 Text("Go to Second Page")
@@ -51,10 +57,10 @@ struct ContentView: View {
                             }
                             .padding(.bottom, 40)
                         }
-                    }
+                   }
                 }
             }
-        }
+    }
         
     
 #Preview {
