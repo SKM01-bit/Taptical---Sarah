@@ -24,7 +24,7 @@ struct Round1Page2: View {
                 
                 Image(isTapped ? "Yellow3" : "White3")
                     .resizable()
-                    .frame(width: 60, height: 60) // 👈 Set your desired size here
+                    .frame(width: 60, height: 60) 
                     .position(x: 100, y: 200)
                     .onTapGesture {
                         isTapped.toggle()
