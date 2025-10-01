@@ -41,7 +41,7 @@ struct SecondPage: View {
                 
                 VStack {
                     Spacer()
-                    NavigationLink(destination: ThirdPage()) {
+                    NavigationLink(destination: Round1Page1()) {
                         Text("Go to Third Page")
                             .foregroundColor(.clear)
                             .padding()

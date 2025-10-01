@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct R1P1: View {
+struct Round1Page1: View {
     @State private var isTapped = false
     @State private var tapCount = 0
     @State private var navigate = false
@@ -23,7 +23,9 @@ struct R1P1: View {
                     .ignoresSafeArea()
                 
                 Image(isTapped ? "Yellow2" : "White2")
-                    .position(x: 350, y: 400)
+                    .resizable()
+                    .frame(width: 60, height: 60) // 👈 Set your desired size here
+                    .position(x: 350, y: 100)
                     .onTapGesture {
                         isTapped.toggle()
                         tapCount += 1
@@ -34,7 +36,7 @@ struct R1P1: View {
                     }
 
                 // Hidden NavigationLink that activates when navigate == true
-                NavigationLink(destination: FourthPage(), isActive: $navigate) {
+                NavigationLink(destination: Round1Page2(), isActive: $navigate) {
                     EmptyView()
                 }
             }
@@ -43,5 +45,5 @@ struct R1P1: View {
 }
 
 #Preview {
-    R1P1()
+    Round1Page1()
 }
