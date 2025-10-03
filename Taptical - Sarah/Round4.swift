@@ -59,97 +59,107 @@ struct Round4: View {
     @StateObject private var questionManager = QuestionManager()
     @State private var displayedQuestion = ""
     
+    @State private var navigateToMainMenu = false
+
+    
     var body: some View {
-        ZStack {
-            
-            Color("Bg_Color")
-                .ignoresSafeArea()
-            Image("Fun_Bg" )
-                .ignoresSafeArea()
-            
-            if levelCleared {
-                levelClearView
-                    
-            } else {
-                gameView
-            }
-            
-            ZStack(alignment: .topTrailing) {
-                Color.clear // Needed to enable alignment
+        
+        NavigationStack {
+            ZStack {
+                NavigationLink(destination: ContentView(), isActive: $navigateToMainMenu) {
+                    EmptyView()
+                }
                 
-                VStack {
-                    HStack {
-                        // Pause Button (only in gameplay)
-                        if !levelCleared {
+                Color("Bg_Color")
+                    .ignoresSafeArea()
+                Image("Fun_Bg" )
+                    .ignoresSafeArea()
+                
+                if levelCleared {
+                    levelClearView
+                    
+                } else {
+                    gameView
+                }
+                
+                ZStack(alignment: .topTrailing) {
+                    Color.clear // Needed to enable alignment
+                    
+                    VStack {
+                        HStack {
+                            // Pause Button (only in gameplay)
+                            if !levelCleared {
+                                Button(action: {
+                                    isPaused = true
+                                }) {
+                                    Image(systemName: "pause.fill")
+                                        .font(.title)
+                                        .frame(width: 30, height: 30)
+                                        .foregroundColor(Color("Btn_Color"))
+                                }
+                            }
+                            
+                            Spacer()
+                            
                             Button(action: {
-                                isPaused = true
+                                Sound.toggle()
+                                print("Speaker toggled: \(Sound)")
                             }) {
-                                Image(systemName: "pause.fill")
+                                Image(systemName: Sound ? "speaker.slash.fill" : "speaker.2.fill")
                                     .font(.title)
                                     .frame(width: 30, height: 30)
                                     .foregroundColor(Color("Btn_Color"))
                             }
                         }
+                        .padding(.horizontal, 30)
+                        .padding(.top, 70)
                         
                         Spacer()
+                    }
+                }
+                .ignoresSafeArea()
+                // Pause Overlay
+                if isPaused {
+                    Color.black.opacity(0.7)
+                        .ignoresSafeArea()
+                    
+                    VStack(spacing: 30) {
+                        Text("Paused")
+                            .font(.system(size: 55, weight: .heavy, design: .rounded))
+                            .foregroundColor(Color("Bg_Color"))
+                            .padding(.bottom, 40)
                         
-                        Button(action: {
-                            Sound.toggle()
-                            print("Speaker toggled: \(Sound)")
-                        }) {
-                            Image(systemName: Sound ? "speaker.slash.fill" : "speaker.2.fill")
-                                .font(.title)
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(Color("Btn_Color"))
+                        Button("Resume") {
+                            isPaused = false
                         }
+                        .frame(maxWidth: 200)
+                        .padding()
+                        .background(Color("Bg_Color").opacity(0.45))
+                        .foregroundColor(.white)
+                        .font(.system(size: 20, weight: .semibold))
+                        .clipShape(Capsule())
+                        
+                        Button("Quit") {
+                            navigateToMainMenu = true
+                            isPaused = false
+                        }
+                        .frame(maxWidth: 200)
+                        .padding()
+                        .background(Color("Bg_Color").opacity(0.45))
+                        .foregroundColor(.white)
+                        .font(.system(size: 20, weight: .semibold))
+                        .clipShape(Capsule())
                     }
-                    .padding(.horizontal, 30)
-                    .padding(.top, 70)
-                    
-                    Spacer()
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black.opacity(0.3))
                 }
             }
-            .ignoresSafeArea()
-            // Pause Overlay
-            if isPaused {
-                Color.black.opacity(0.7)
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 30) {
-                    Text("Paused")
-                        .font(.system(size: 55, weight: .heavy, design: .rounded))
-                        .foregroundColor(Color("Bg_Color"))
-                        .padding(.bottom, 40)
-                    
-                    Button("Resume") {
-                        isPaused = false
-                    }
-                    .frame(maxWidth: 200)
-                    .padding()
-                    .background(Color("Bg_Color").opacity(0.45))
-                    .foregroundColor(.white)
-                    .font(.system(size: 20, weight: .semibold))
-                    .clipShape(Capsule())
-                    
-                    Button("Quit") {
-                        resetGame()
-                        isPaused = false
-                    }
-                    .frame(maxWidth: 200)
-                    .padding()
-                    .background(Color("Bg_Color").opacity(0.45))
-                    .foregroundColor(.white)
-                    .font(.system(size: 20, weight: .semibold))
-                    .clipShape(Capsule())
-                }
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.black.opacity(0.3))
+            .onAppear {
+                startNewRound()
             }
         }
-        .onAppear {
-            startNewRound()
-        }
+        .navigationBarBackButtonHidden(true)
     }
     
     var gameView: some View {
@@ -219,7 +229,7 @@ struct Round4: View {
                 
                 
                 Button(action: {
-                    resetGame()
+                    navigateToMainMenu = true
                 }) {
                     
                     Image(systemName: "arrow.trianglehead.clockwise")
