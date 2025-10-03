@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var showTaptii = false
     @State private var didRunDripSequence = false
     @State private var showAppName = false
+    @State private var showGlow = false
     @State private var pulse = false
 
     
@@ -123,6 +124,7 @@ struct ContentView: View {
             .scaledToFit()
             .scaleEffect(pulse ? 1.1 : 0.9)
             .animation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true), value: pulse)
+            .animation(.easeIn(duration: 1), value: showGlow)
             .onAppear {
                 pulse = true    }
     }

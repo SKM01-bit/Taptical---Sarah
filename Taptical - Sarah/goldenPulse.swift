@@ -5,7 +5,7 @@
 //  Created by Sarah Khalid Almalki on 06/04/1447 AH.
 //
 
-import SwiftUI
+/*import SwiftUI
 
 struct goldenPulse: View {
     @State private var pulse = false
@@ -24,3 +24,4 @@ struct goldenPulse: View {
 #Preview {
     goldenPulse()
 }
+*/

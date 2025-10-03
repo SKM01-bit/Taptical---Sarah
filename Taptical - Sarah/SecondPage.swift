@@ -35,8 +35,8 @@ struct SecondPage: View {
                         .position(x: 190, y: 650) // ← X and Y coordinates
                 }
                 VStack{
-                    goldenPulse()
-                    .position(x: 238, y: 499)
+                  //  goldenPulse()
+                  //  .position(x: 238, y: 499)
                 }
                 
                 VStack {
