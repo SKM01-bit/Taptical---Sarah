@@ -16,27 +16,27 @@ struct Tile: Identifiable {
 }
 
 class QuestionManager: ObservableObject {
-    @Published var questions: [String] = []
+    @Published var QuestionsFun: [String] = []
 
     init() {
         loadQuestions()
     }
 
     private func loadQuestions() {
-        if let url = Bundle.main.url(forResource: "questions", withExtension: "json"),
+        if let url = Bundle.main.url(forResource: "QuestionsFun", withExtension: "json"),
            let data = try? Data(contentsOf: url) {
             do {
-                questions = try JSONDecoder().decode([String].self, from: data)
+                QuestionsFun = try JSONDecoder().decode([String].self, from: data)
             } catch {
                 print("Failed to decode questions.json:", error)
             }
         } else {
-            print("questions.json not found.")
+            print("QuestionsFun.json not found.")
         }
     }
 
     func randomQuestion() -> String {
-        questions.randomElement() ?? "No questions available."
+        QuestionsFun.randomElement() ?? "No questions available."
     }
 }
 
