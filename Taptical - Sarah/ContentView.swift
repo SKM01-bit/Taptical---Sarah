@@ -53,32 +53,35 @@ struct ContentView: View {
                 if showTaptii {
                     VStack {
                         Spacer()
-                        Image("Taptii")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 500, height: 500)
-                            .offset(y: -20)
-                            .transition(.opacity)
-                        //   .animation(.easeIn(duration: frameDuration))
+                        
+                        ZStack {
+                            Image("Taptii")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 500, height: 500)
+                                .offset(y: -20)
+                                .transition(.opacity)
+
+                            goldenPulse() // Now overlays Taptii
+                        }
+                        
                         Image("App name")
                             .opacity(showAppName ? 1 : 0)
                             .animation(.easeIn(duration: 1), value: showAppName)
-                            .frame(height: 100) // fix height so layout doesn't change, adjust as needed
-                        goldenPulse()
+                            .frame(height: 100)
+
                         NavigationLink(destination: Round1Page1()) {
                             Text("Press to start")
                                 .foregroundColor(.gray)
                                 .padding(.bottom, 150)
-                            
                         }
                     }
                     .transition(.opacity)
                     .animation(.easeInOut(duration: 0.9), value: showTaptii)
                     .padding(.bottom)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    .transition(.opacity)
-                    .animation(.easeIn(duration: 1), value: showTaptii)
                 }
+
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
@@ -107,6 +110,14 @@ struct ContentView: View {
                 currentFrame = -1
                 showTaptii = true
             }
+            
+            // Show Glow a bit after Taptii
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                withAnimation {
+                    showGlow = true
+                }
+            }
+
             // Show app name after 2 seconds
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 withAnimation {
@@ -115,19 +126,23 @@ struct ContentView: View {
             }
         }
     }
+
     
     func goldenPulse() -> some View {
         Image("Glow")
             .resizable()
             .frame(width: 200, height: 200)
-            .offset(y: -20)
+            .offset(x:60,y: 60)
             .scaledToFit()
             .scaleEffect(pulse ? 1.1 : 0.9)
+            .opacity(showGlow ? 1 : 0) // Fade in
+            .animation(.easeIn(duration: 1), value: showGlow) // Smooth fade
             .animation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true), value: pulse)
-            .animation(.easeIn(duration: 1), value: showGlow)
             .onAppear {
-                pulse = true    }
+                pulse = true
+            }
     }
+
     
     
 }

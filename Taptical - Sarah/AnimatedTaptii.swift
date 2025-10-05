@@ -16,7 +16,7 @@ struct AnimatedTaptii: View {
         Image("Taptii")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 400, height: 400)
+                    .frame(width: 200, height: 200)
                     .scaleEffect(pulse ? 1.1 : 0.9)
                     .animation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true), value: pulse)
                     .onAppear {
