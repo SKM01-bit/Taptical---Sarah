@@ -159,7 +159,7 @@ struct Round3: View {
                 startNewRound()
             }
         }
-        .navigationBarBackButtonHidden(true)
+//        .navigationBarBackButtonHidden(true)
     }
     
     var gameView: some View {
