@@ -40,7 +40,7 @@ class QuestionManager: ObservableObject {
     }
 }
 
-struct Round4: View {
+struct Round3: View {
 
     @State private var Sound = false
     @State private var isPaused = false
@@ -300,6 +300,6 @@ struct Round4: View {
 }
 
 #Preview {
-    Round4()
+    Round3()
 }
 
