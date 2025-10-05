@@ -1,6 +1,6 @@
 import SwiftUI
 
-// كل عنصر يمثل رقم مفرغ في الشاشة
+// يمثل كل رقم في الشاشة
 struct NumberItem: Identifiable {
     let id = UUID()
     var position: CGPoint
@@ -14,56 +14,58 @@ struct MyContentView: View {
     @State private var numberItems: [NumberItem] = []
     @State private var screenSize: CGSize = .zero
     @State private var isTransitioning = false
+    @State private var isGameOver = false
+
+    let itemSize: CGFloat = 40 // حجم الرقم (مهم لمنع التراكب)
+    let paddingBetweenItems: CGFloat = 50 // المسافة الدنيا بين الأرقام
 
     var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                // الخلفية الأساسية تغطي الشاشة كاملة
-                Image("background2")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .clipped()
-                    .ignoresSafeArea()
-
-                // الصورة الثانية تظهر فوق الخلفية
-                Image("r2")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .ignoresSafeArea()
-
-                // عرض الأرقام العشوائية
-                ForEach(numberItems) { item in
-                    Image(item.isTapped ? "C\(currentNumber!)" : "\(currentNumber!)")
+        if isGameOver {
+            GameOverView()
+        } else {
+            GeometryReader { geometry in
+                ZStack {
+                    Image("background2")
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: 40, height: 40) // حجم أصغر
-                        .rotationEffect(Angle(degrees: item.rotation)) // دوران عشوائي
-                        .position(item.position)
-                        .onTapGesture {
-                            handleTap(on: item.id)
-                        }
-                        .animation(.easeInOut, value: item.isTapped)
+                        .scaledToFill()
+                        .frame(width: geometry.size.width, height: geometry.size.height)
+                        .clipped()
+                        .ignoresSafeArea()
+
+                    Image("r2")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .ignoresSafeArea()
+
+                    // عرض الأرقام
+                    ForEach(numberItems) { item in
+                        Image(item.isTapped ? "C\(currentNumber!)" : "\(currentNumber!)")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: itemSize, height: itemSize)
+                            .rotationEffect(Angle(degrees: item.rotation))
+                            .position(item.position)
+                            .onTapGesture {
+                                handleTap(on: item.id)
+                            }
+                            .animation(.easeInOut, value: item.isTapped)
+                    }
                 }
-            }
-            .onAppear {
-                screenSize = geometry.size
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    startNextRound()
+                .onAppear {
+                    screenSize = geometry.size
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        startNextRound()
+                    }
                 }
             }
         }
     }
 
-    // بدء راوند جديد برقم جديد عشوائي من 1 إلى 4
+    // بدء راوند جديد
     func startNextRound() {
-        guard usedNumbers.count < 4 else {
-            // إذا خلصت الأربع أرقام، نعيد اللعب من جديد
-            usedNumbers = []
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                startNextRound()
-            }
+        if usedNumbers.count >= 5 {
+            isGameOver = true
             return
         }
 
@@ -75,38 +77,64 @@ struct MyContentView: View {
         currentNumber = newNumber
         usedNumbers.append(newNumber)
 
-        numberItems = generateRandomPositions(for: newNumber)
+        numberItems = generateNonOverlappingPositions(for: newNumber)
     }
 
-    // توليد أماكن ودوران عشوائي لكل نسخة من الرقم
-    func generateRandomPositions(for count: Int) -> [NumberItem] {
+    // توليد أماكن متباعدة لا تتداخل
+    func generateNonOverlappingPositions(for count: Int) -> [NumberItem] {
         var items: [NumberItem] = []
+        let maxAttempts = 100
 
         for _ in 0..<count {
-            let x = CGFloat.random(in: 50...(screenSize.width - 50))
-            let y = CGFloat.random(in: 120...(screenSize.height - 120))
-            let angle = Double.random(in: -30...30) // دوران عشوائي
-            items.append(NumberItem(position: CGPoint(x: x, y: y), rotation: angle))
+            var position: CGPoint
+            var attempts = 0
+
+            repeat {
+                let x = CGFloat.random(in: itemSize...(screenSize.width - itemSize))
+                let y = CGFloat.random(in: itemSize + 100...(screenSize.height - itemSize - 100))
+                position = CGPoint(x: x, y: y)
+                attempts += 1
+            } while items.contains(where: { distance(from: $0.position, to: position) < paddingBetweenItems }) && attempts < maxAttempts
+
+            let angle = Double.random(in: -30...30)
+            items.append(NumberItem(position: position, rotation: angle))
         }
 
         return items
     }
 
-    // التعامل مع الضغط على رقم
+    // حساب المسافة بين نقطتين
+    func distance(from: CGPoint, to: CGPoint) -> CGFloat {
+        sqrt(pow(from.x - to.x, 2) + pow(from.y - to.y, 2))
+    }
+
+    // التعامل مع الضغط
     func handleTap(on id: UUID) {
         guard let index = numberItems.firstIndex(where: { $0.id == id }) else { return }
         if numberItems[index].isTapped || isTransitioning { return }
 
         numberItems[index].isTapped = true
 
-        // إذا ضغط المستخدم على كل النسخ
+        // إذا كل الأرقام تم الضغط عليها → ننتقل فورًا للراوند التالي
         if numberItems.allSatisfy({ $0.isTapped }) {
             isTransitioning = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 numberItems = []
                 isTransitioning = false
                 startNextRound()
             }
+        }
+    }
+}
+
+// صفحة النهاية
+struct GameOverView: View {
+    var body: some View {
+        ZStack {
+            Color.black.ignoresSafeArea()
+            Text("انتهت اللعبة!")
+                .font(.largeTitle)
+                .foregroundColor(.white)
         }
     }
 }
