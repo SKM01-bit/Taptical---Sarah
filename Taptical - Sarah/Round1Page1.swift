@@ -21,28 +21,29 @@ struct Tile1: Identifiable {
 struct Round1Page1: View {
     @State private var tiles: [Tile1] = []
     @State private var currentNumber: Int = 1
-
+    @State private var showPopup = false
+    
     @State private var round = 1
     let maxRounds = 5
-
+    
     @State private var levelCleared = false
     @State private var navigateToNextPage = false
     
     // Audio player for tap sound
     @State private var audioPlayer: AVAudioPlayer?
-
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 NavigationLink(destination: Round1Page2(), isActive: $navigateToNextPage) {
                     EmptyView()
                 }
-
+                
                 Image("FirstRound")
                     .resizable()
                     .scaledToFill()
                     .ignoresSafeArea()
-
+                
                 if levelCleared {
                     levelClearView
                 } else {
@@ -55,22 +56,57 @@ struct Round1Page1: View {
         }
         .navigationBarBackButtonHidden(true)
     }
-
+    
     // MARK: - Game View
     var gameView: some View {
         ZStack {
+            // Main tiles
             ForEach(tiles) { tile in
                 Image(tile.isTapped ? "C\(tile.number)" : "\(tile.number)")
                     .resizable()
                     .frame(width: 40, height: 40)
                     .position(tile.position)
                     .onTapGesture {
-                        playSound(named: "tap") // Play sound on tap
+                        playSound(named: "tap")
                         handleTap(tile)
                     }
             }
+
+            // Popup
+            if showPopup {
+                ZStack(alignment: .topLeading) {
+                    // 👇 Popup background
+                    NotificationView(
+                        title: "TAPTI!",
+                        message: "Find the number, Tap it and have fun!!",
+                        onClose: { showPopup = false }
+                    )
+                    .padding(.top, 30) // leaves space for the image to overlap
+
+                    // 👇 Image overlapping the top-left corner
+                    Image("Chibi_Tapti") // replace with your actual asset name
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .offset(x: 30, y: -20) // adjust to overlap nicely
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .padding(.top, 100) // move the whole popup a bit down
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .animation(.spring(), value: showPopup)
+                .zIndex(1)
+            }
+
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                showPopup = true
+            }
         }
     }
+
+       
+
+    
 
     // MARK: - Level Cleared View
     var levelClearView: some View {
