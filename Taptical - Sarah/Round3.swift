@@ -16,27 +16,27 @@ struct Tile: Identifiable {
 }
 
 class QuestionManager: ObservableObject {
-    @Published var QuestionsFun: [String] = []
+    @Published var QuestionsMix: [String] = []
 
     init() {
         loadQuestions()
     }
 
     private func loadQuestions() {
-        if let url = Bundle.main.url(forResource: "QuestionsFun", withExtension: "json"),
+        if let url = Bundle.main.url(forResource: "QuestionsMix", withExtension: "json"),
            let data = try? Data(contentsOf: url) {
             do {
-                QuestionsFun = try JSONDecoder().decode([String].self, from: data)
+                QuestionsMix = try JSONDecoder().decode([String].self, from: data)
             } catch {
                 print("Failed to decode questions.json:", error)
             }
         } else {
-            print("QuestionsFun.json not found.")
+            print("QuestionsMix.json not found.")
         }
     }
 
     func randomQuestion() -> String {
-        QuestionsFun.randomElement() ?? "No questions available."
+        QuestionsMix.randomElement() ?? "No questions available."
     }
 }
 
@@ -72,7 +72,7 @@ struct Round3: View {
                 
                 Color("Bg_Color")
                     .ignoresSafeArea()
-                Image("Fun_Bg" )
+                Image("Mix_Bg" )
                     .ignoresSafeArea()
                 
                 if levelCleared {
@@ -95,7 +95,7 @@ struct Round3: View {
                                     Image(systemName: "pause.fill")
                                         .font(.title)
                                         .frame(width: 30, height: 30)
-                                        .foregroundColor(Color("Btn_Color"))
+                                        .foregroundColor(Color("MGlow"))
                                 }
                             }
                             
@@ -108,7 +108,7 @@ struct Round3: View {
                                 Image(systemName: Sound ? "speaker.slash.fill" : "speaker.2.fill")
                                     .font(.title)
                                     .frame(width: 30, height: 30)
-                                    .foregroundColor(Color("Btn_Color"))
+                                    .foregroundColor(Color("MGlow"))
                             }
                         }
                         .padding(.horizontal, 30)
@@ -167,7 +167,7 @@ struct Round3: View {
             ForEach(tiles) { tile in
                 Image(tile.isTapped ? "C\(tile.number)" : "\(tile.number)")
                     .resizable()
-                    .frame(width: 30, height: 30)
+                    .frame(width: 20, height: 20)
                     .position(tile.position)
                     .onTapGesture {
                         handleTap(tile)
@@ -180,14 +180,14 @@ struct Round3: View {
         
         ZStack(){
             Color("Bg_Color").ignoresSafeArea()
-            Image("Fun_Bg")
+            Image("Mix_Bg")
                 .opacity(84/255)
                 .ignoresSafeArea()
-            Image("Confitti")
+            Image("Sparkle")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 990, height: 1000)
-                .position(x:160, y:550)
+                .position(x:160, y:400)
             
             
             VStack{
@@ -195,7 +195,7 @@ struct Round3: View {
 
                     .resizable()
                 .frame(width: 400, height: 400)
-                    .shadow(color: Color("Glow").opacity(glow ? 231/255 : 150/255), radius: glow ? 5 : 1, x: 0, y: 9)
+                    .shadow(color: Color("MGlow").opacity(glow ? 231/255 : 150/255), radius: glow ? 5 : 1, x: 0, y: 9)
                     .offset(y: bounce ? -7 : 7) // Move up and down
                     .animation(
                         .easeInOut(duration: 0.6).repeatForever(autoreverses: true),
@@ -205,13 +205,13 @@ struct Round3: View {
                 Text("Awesome!")
                     .font(.system(size: 45, weight: .heavy, design: .rounded) )
                     .bold()
-                    .foregroundColor(Color("Font"))
-                    .shadow(color: Color("Glow").opacity(glow ? 231/255 : 120/255), radius: glow ? 5 : 1, x: 0, y: 4)
+                    .foregroundColor(Color("MFont"))
+                    .shadow(color: Color("MGlow").opacity(glow ? 231/255 : 120/255), radius: glow ? 5 : 1, x: 0, y: 4)
                     .animation(.easeInOut(duration: 0.5), value: glow)
                 
                 Text("For The Last Question")
                     .font(.system(size: 18, weight: .heavy, design: .rounded))
-                    .foregroundColor(Color("Glow"))
+                    .foregroundColor(Color("MGlow"))
                     .padding(.top, 5)
                     .padding(.bottom, 5)
                 if !displayedQuestion.isEmpty {
@@ -224,7 +224,7 @@ struct Round3: View {
                 
                 Text("Play Again?")
                     .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundColor(Color("Glow"))
+                    .foregroundColor(Color("MGlow"))
                     .padding(.top, 20)
                 
                 
@@ -236,7 +236,7 @@ struct Round3: View {
                         .font(.title)
                         .bold()
                         .frame(width: 30, height: 30)
-                        .foregroundColor(Color("Glow")) // icon color
+                        .foregroundColor(Color("MGlow")) // icon color
                 }
             }
             .padding(.top, 60)

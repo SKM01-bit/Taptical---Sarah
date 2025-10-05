@@ -87,7 +87,7 @@ struct Round1Page1: View {
                     Image("Chibi_Tapti") // replace with your actual asset name
                         .resizable()
                         .frame(width: 50, height: 50)
-                        .offset(x: 30, y: -20) // adjust to overlap nicely
+                        .offset(x: 30, y: 60) // adjust to overlap nicely
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .padding(.top, 100) // move the whole popup a bit down
