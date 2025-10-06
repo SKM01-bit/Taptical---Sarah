@@ -152,14 +152,14 @@ struct Round3: View {
                     }
                     .padding()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .background(Color.black.opacity(0.3))
+                    .background(Color.black.opacity(0.8))
                 }
             }
             .onAppear {
                 startNewRound()
             }
         }
-//        .navigationBarBackButtonHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
     
     var gameView: some View {

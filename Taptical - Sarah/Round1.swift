@@ -82,7 +82,7 @@ struct NotificationView: View {
 }
 
 // MARK: - Round1Page1 View
-struct Round1Page1: View {
+struct Round1: View {
     @State private var Sound = false
     @State private var isPaused = false
     
@@ -127,50 +127,86 @@ struct Round1Page1: View {
                 } else {
                     gameView
                 }
+                ZStack(alignment: .topTrailing) {
+                    Color.clear
+                    VStack {
+                        HStack {
+                            if !levelCleared {
+                                Button(action: {
+                                    isPaused = true
+                                }) {
+                                    Image(systemName: "pause.fill")
+                                        .font(.title)
+                                        .frame(width: 30, height: 30)
+                                        .foregroundColor(Color("DGlow"))
+                                }
+                            }
+
+                            Spacer()
+
+                            Button(action: {
+                                Sound.toggle()
+                            }) {
+                                Image(systemName: Sound ? "speaker.slash.fill" : "speaker.2.fill")
+                                    .font(.title)
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(Color("DGlow"))
+                            }
+                        }
+                        .padding(.horizontal, 30)
+                        .padding(.top, 70)
+
+                        Spacer()
+                    }
+                }
+                .ignoresSafeArea()
+
+                if isPaused {
+                    Color.black.opacity(0.7)
+                        .ignoresSafeArea()
+
+                    VStack(spacing: 30) {
+                        Text("Paused")
+                            .font(.system(size: 55, weight: .heavy, design: .rounded))
+                            .foregroundColor(Color("Bg_Color"))
+                            .padding(.bottom, 40)
+
+                        Button("Resume") {
+                            isPaused = false
+                        }
+                        .frame(maxWidth: 200)
+                        .padding()
+                        .background(Color("Bg_Color").opacity(0.45))
+                        .foregroundColor(.white)
+                        .font(.system(size: 20, weight: .semibold))
+                        .clipShape(Capsule())
+
+                        Button("Quit") {
+                            navigateToMainMenu = true
+                            isPaused = false
+                        }
+                        .frame(maxWidth: 200)
+                        .padding()
+                        .background(Color("Bg_Color").opacity(0.45))
+                        .foregroundColor(.white)
+                        .font(.system(size: 20, weight: .semibold))
+                        .clipShape(Capsule())
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black.opacity(0.8))
+                }
             }
             .onAppear {
                 startNewRound()
             }
         }
-//        .navigationBarBackButtonHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
     
     // MARK: - Game View
     var gameView: some View {
         ZStack {
-            
-            VStack {
-                HStack {
-                    // Pause Button (only in gameplay)
-                    if !levelCleared {
-                        Button(action: {
-                            isPaused = true
-                        }) {
-                            Image(systemName: "pause.fill")
-                                .font(.title)
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(Color("DGlow"))
-                        }
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        Sound.toggle()
-                        print("Speaker toggled: \(Sound)")
-                    }) {
-                        Image(systemName: Sound ? "speaker.slash.fill" : "speaker.2.fill")
-                            .font(.title)
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(Color("DGlow"))
-                    }
-                }
-                .padding(.horizontal, 30)
-                .padding(.top, 70)
-                
-                Spacer()
-            }
-            
             // Main tiles
             ForEach(tiles) { tile in
                 Image(tile.isTapped ? "C\(tile.number)" : "\(tile.number)")
@@ -181,44 +217,8 @@ struct Round1Page1: View {
                         playSound(named: "tap")
                         handleTap(tile)
                     }
+                    .animation(.easeInOut, value: tile.isTapped)
             }
-            
-            if isPaused {
-                Color.black.opacity(0.7)
-                    .ignoresSafeArea()
-                
-                VStack(spacing: 30) {
-                    Text("Paused")
-                        .font(.system(size: 55, weight: .heavy, design: .rounded))
-                        .foregroundColor(Color("Bg_Color"))
-                        .padding(.bottom, 40)
-                    
-                    Button("Resume") {
-                        isPaused = false
-                    }
-                    .frame(maxWidth: 200)
-                    .padding()
-                    .background(Color("Bg_Color").opacity(0.45))
-                    .foregroundColor(.white)
-                    .font(.system(size: 20, weight: .semibold))
-                    .clipShape(Capsule())
-                    
-                    Button("Quit") {
-                        navigateToMainMenu = true
-                        isPaused = false
-                    }
-                    .frame(maxWidth: 200)
-                    .padding()
-                    .background(Color("Bg_Color").opacity(0.45))
-                    .foregroundColor(.white)
-                    .font(.system(size: 20, weight: .semibold))
-                    .clipShape(Capsule())
-                }
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.black.opacity(0.3))
-            }
-
             // Popup
             if showPopup {
                 ZStack(alignment: .topLeading) {
@@ -228,7 +228,7 @@ struct Round1Page1: View {
                         message: "Find the number, Tap it and have fun!!",
                         onClose: { showPopup = false }
                     )
-                    .padding(.top, 30) // leaves space for the image to overlap
+                    .padding(.top, 35) // leaves space for the image to overlap
 
                     // 👇 Image overlapping the top-left corner
                     Image("Chibi_Tapti") // replace with your actual asset name
@@ -237,7 +237,7 @@ struct Round1Page1: View {
                         .offset(x: 30, y: 60) // adjust to overlap nicely
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .padding(.top, 100) // move the whole popup a bit down
+                .padding(.top, 60) // move the whole popup a bit down
                 .transition(.move(edge: .top).combined(with: .opacity))
                 .animation(.spring(), value: showPopup)
                 .zIndex(1)
@@ -250,10 +250,6 @@ struct Round1Page1: View {
             }
         }
     }
-
-       
-
-    
 
     // MARK: - Level Cleared View
     var levelClearView: some View {
@@ -380,5 +376,5 @@ struct Round1Page1: View {
         }
     }
 #Preview {
-    Round1Page1()
+    Round1()
 }

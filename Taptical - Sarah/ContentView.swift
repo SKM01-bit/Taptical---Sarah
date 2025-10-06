@@ -48,7 +48,6 @@ struct ContentView: View {
                             .animation(.easeInOut(duration: frameDuration), value: currentFrame)
                     }
                 }
-                
                 // Show Taptii logo and button after drip animation
                 if showTaptii {
                     VStack {
@@ -61,19 +60,22 @@ struct ContentView: View {
                                 .frame(width: 500, height: 500)
                                 .offset(y: -20)
                                 .transition(.opacity)
-
+                                .position(x:200, y: 400)
+                            
                             goldenPulse() // Now overlays Taptii
+                            
+                            Image("App name")
+                                .resizable()
+                                .opacity(showAppName ? 1 : 0)
+                                .animation(.easeIn(duration: 1), value: showAppName)
+                                .frame(width: 250, height: 200)
+                                .position(x: 200, y: 650)
+                            
                         }
-                        
-                        Image("App name")
-                            .opacity(showAppName ? 1 : 0)
-                            .animation(.easeIn(duration: 1), value: showAppName)
-                            .frame(height: 100)
-
-                        NavigationLink(destination: Round1Page1()) {
+                        NavigationLink(destination: AppGoal()) {
                             Text("Press to start")
                                 .foregroundColor(.gray)
-                                .padding(.bottom, 150)
+                                .padding(.bottom, 50)
                         }
                     }
                     .transition(.opacity)
@@ -81,7 +83,6 @@ struct ContentView: View {
                     .padding(.bottom)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 }
-
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
@@ -94,6 +95,7 @@ struct ContentView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     func startDripSequence() {
@@ -129,20 +131,24 @@ struct ContentView: View {
 
     
     func goldenPulse() -> some View {
-        Image("Glow")
-            .resizable()
-            .frame(width: 200, height: 200)
-            .offset(x:60,y: 60)
-            .scaledToFit()
-            .scaleEffect(pulse ? 1.1 : 0.9)
-            .opacity(showGlow ? 1 : 0) // Fade in
-            .animation(.easeIn(duration: 1), value: showGlow) // Smooth fade
-            .animation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true), value: pulse)
-            .onAppear {
-                pulse = true
-            }
+        ZStack{
+            Image("Glow")
+                .resizable()
+                .frame(width: 200, height: 230)
+                .scaledToFit()
+                .scaleEffect(pulse ? 1.1 : 0.9)
+                .opacity(showGlow ? 1 : 0) // Fade in
+                .animation(.easeIn(duration: 1), value: showGlow) // Smooth fade
+                .animation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true), value: pulse)
+                .onAppear {
+                    pulse = true
+                }
+        }
+        .position(x: 255, y:450)
+        .offset(x:0,y: 0)
     }
+}
 
-    
-    
+#Preview {
+    ContentView()
 }
