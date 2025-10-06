@@ -35,7 +35,7 @@ class QuestionManager2: ObservableObject {
 
 struct Round2: View {
 
-    @State private var Sound = false
+    @AppStorage("isMuted") private var Sound = false
     @State private var isPaused = false
 
     @State private var tiles: [Tile] = []
@@ -95,6 +95,13 @@ struct Round2: View {
 
                             Button(action: {
                                 Sound.toggle()
+                                
+                                if Sound {
+                                        AudioManager.shared.pauseBackgroundMusic()
+                                    } else {
+                                        AudioManager.shared.resumeBackgroundMusic()
+                                    }
+                                
                             }) {
                                 Image(systemName: Sound ? "speaker.slash.fill" : "speaker.2.fill")
                                     .font(.title)

@@ -86,6 +86,13 @@ struct ContentView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
+                // Start background music when view appears
+                AudioManager.shared.playBackgroundMusic()
+
+                if !AudioManager.shared.isPlaying {
+                     AudioManager.shared.playBackgroundMusic()
+                 }
+                
                 if !didRunDripSequence {
                     startDripSequence()
                     didRunDripSequence = true

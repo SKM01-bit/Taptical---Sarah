@@ -83,7 +83,7 @@ struct NotificationView: View {
 
 // MARK: - Round1Page1 View
 struct Round1: View {
-    @State private var Sound = false
+    @AppStorage("isMuted") private var Sound = false
     @State private var isPaused = false
     
     @State private var tiles: [Tile1] = []
@@ -146,6 +146,12 @@ struct Round1: View {
 
                             Button(action: {
                                 Sound.toggle()
+                                
+                                if Sound {
+                                        AudioManager.shared.pauseBackgroundMusic()
+                                    } else {
+                                        AudioManager.shared.resumeBackgroundMusic()
+                                    }
                             }) {
                                 Image(systemName: Sound ? "speaker.slash.fill" : "speaker.2.fill")
                                     .font(.title)

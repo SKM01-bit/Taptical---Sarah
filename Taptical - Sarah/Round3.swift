@@ -42,7 +42,7 @@ class QuestionManager: ObservableObject {
 
 struct Round3: View {
 
-    @State private var Sound = false
+    @AppStorage("isMuted") private var Sound = false
     @State private var isPaused = false
     
     
@@ -103,6 +103,13 @@ struct Round3: View {
                             
                             Button(action: {
                                 Sound.toggle()
+                                
+                                if Sound {
+                                        AudioManager.shared.pauseBackgroundMusic()
+                                    } else {
+                                        AudioManager.shared.resumeBackgroundMusic()
+                                    }
+                                
                                 print("Speaker toggled: \(Sound)")
                             }) {
                                 Image(systemName: Sound ? "speaker.slash.fill" : "speaker.2.fill")
