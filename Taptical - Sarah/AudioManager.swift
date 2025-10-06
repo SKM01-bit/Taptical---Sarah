@@ -5,13 +5,19 @@
 //  Created by Jana Abdulaziz Malibari on 06/10/2025.
 //
 
+import SwiftUI
 import AVFoundation
 
 class AudioManager {
     static let shared = AudioManager()
     private var player: AVAudioPlayer?
-
-    private init() {}
+    
+    // Persist mute state across views and sessions
+    @AppStorage("isMuted") private var Sound: Bool = false
+    
+    private init() {
+        setupNotifications()
+    }
 
     func playBackgroundMusic() {
         print("🔈 Attempting to play background music...")
@@ -58,5 +64,29 @@ class AudioManager {
     func setVolume(to value: Float) {
         player?.volume = value
     }
-}
- 
+    
+    // MARK: - App Lifecycle Observers
+       private func setupNotifications() {
+           NotificationCenter.default.addObserver(
+               self,
+               selector: #selector(appDidEnterBackground),
+               name: UIApplication.didEnterBackgroundNotification,
+               object: nil
+           )
+
+           NotificationCenter.default.addObserver(
+               self,
+               selector: #selector(appDidBecomeActive),
+               name: UIApplication.didBecomeActiveNotification,
+               object: nil
+           )
+       }
+
+       @objc private func appDidEnterBackground() {
+           pauseBackgroundMusic()
+       }
+
+       @objc private func appDidBecomeActive() {
+           resumeBackgroundMusic()
+       }
+   }
