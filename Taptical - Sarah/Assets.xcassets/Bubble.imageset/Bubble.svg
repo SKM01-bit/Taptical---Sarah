@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="332px" height="236px" viewBox="0 0 332 236" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Rectangle 2</title>
+    <defs>
+        <linearGradient x1="50%" y1="4.6346906%" x2="50%" y2="77.1120924%" id="linearGradient-1">
+            <stop stop-color="#FFFCFA" offset="0%"></stop>
+            <stop stop-color="#DEC5E3" offset="36.7306636%"></stop>
+            <stop stop-color="#BDA4D9" offset="73.6472733%"></stop>
+            <stop stop-color="#FFF6F1" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FDF8F6" offset="0%"></stop>
+            <stop stop-color="#FFE3D2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Final_Interfaces.Animation9" transform="translate(-24, -195)" fill="url(#linearGradient-2)">
+            <path d="M37,195 L343,195 C350.179702,195 356,200.820298 356,208 L356,317 C356,324.179702 350.179702,330 343,330 L86,330 L86,330 C72,338 67,344.333333 71,349 C72.3073283,350.63416 86,356 95,368 C102,380 85.0554985,378.576195 84,391 C83.3675403,398.444403 87.3675403,411.777736 96,431 C82.469977,410.904726 75.469977,397.238059 75,390 C74.3464175,379.934254 89,379 86,371 C84,367 69,363 55,351 C52.5049398,346.453156 52.5049398,339.453156 55,330 L37,330 C29.8202983,330 24,324.179702 24,317 L24,208 C24,200.820298 29.8202983,195 37,195 Z" id="Rectangle-2"></path>
+        </g>
+    </g>
+</svg>
