@@ -42,6 +42,45 @@ class QuestionManager1: ObservableObject {
     }
 }
 
+struct NotificationView: View {
+    var title: String
+    var message: String
+    var onClose: () -> Void
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 12) {
+            Image("tapti")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 60, height: 60)
+                .clipShape(Circle())
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.headline)
+                    .foregroundColor(.black)
+                Text(message)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+
+            Spacer()
+
+            Button(action: onClose) {
+                Image(systemName: "xmark.circle.fill")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(16)
+        .shadow(radius: 5)
+        .padding(.horizontal)
+    }
+}
+
 // MARK: - Round1Page1 View
 struct Round1Page1: View {
     @State private var Sound = false
